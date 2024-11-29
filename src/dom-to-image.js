@@ -136,13 +136,13 @@
 
     function copyOptions(options) {
         // Copy options to impl options for use in impl
-        if(typeof(options.imagePlaceholder) === 'undefined') {
+        if (typeof (options.imagePlaceholder) === 'undefined') {
             domtoimage.impl.options.imagePlaceholder = defaultOptions.imagePlaceholder;
         } else {
             domtoimage.impl.options.imagePlaceholder = options.imagePlaceholder;
         }
 
-        if(typeof(options.cacheBust) === 'undefined') {
+        if (typeof (options.cacheBust) === 'undefined') {
             domtoimage.impl.options.cacheBust = defaultOptions.cacheBust;
         } else {
             domtoimage.impl.options.cacheBust = options.cacheBust;
@@ -332,7 +332,6 @@
                 node.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
                 return new XMLSerializer().serializeToString(node);
             })
-            .then(util.escapeXhtml)
             .then(function (xhtml) {
                 return '<foreignObject x="0" y="0" width="100%" height="100%">' + xhtml + '</foreignObject>';
             })
@@ -358,7 +357,6 @@
             uid: uid(),
             delay: delay,
             asArray: asArray,
-            escapeXhtml: escapeXhtml,
             makeImage: makeImage,
             width: width,
             height: height
@@ -462,7 +460,7 @@
 
         function getAndEncode(url) {
             var TIMEOUT = 30000;
-            if(domtoimage.impl.options.cacheBust) {
+            if (domtoimage.impl.options.cacheBust) {
                 // Cache bypass so we dont have CORS issues with cached images
                 // Source: https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest#Bypassing_the_cache
                 url += ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime();
@@ -479,9 +477,9 @@
                 request.send();
 
                 var placeholder;
-                if(domtoimage.impl.options.imagePlaceholder) {
+                if (domtoimage.impl.options.imagePlaceholder) {
                     var split = domtoimage.impl.options.imagePlaceholder.split(/,/);
-                    if(split && split[1]) {
+                    if (split && split[1]) {
                         placeholder = split[1];
                     }
                 }
@@ -490,7 +488,7 @@
                     if (request.readyState !== 4) return;
 
                     if (request.status !== 200) {
-                        if(placeholder) {
+                        if (placeholder) {
                             resolve(placeholder);
                         } else {
                             fail('cannot fetch resource: ' + url + ', status: ' + request.status);
@@ -508,7 +506,7 @@
                 }
 
                 function timeout() {
-                    if(placeholder) {
+                    if (placeholder) {
                         resolve(placeholder);
                     } else {
                         fail('timeout of ' + TIMEOUT + 'ms occured while fetching resource: ' + url);
@@ -545,10 +543,6 @@
             var length = arrayLike.length;
             for (var i = 0; i < length; i++) array.push(arrayLike[i]);
             return array;
-        }
-
-        function escapeXhtml(string) {
-            return string.replace(/#/g, '%23').replace(/\n/g, '%0A');
         }
 
         function width(node) {
